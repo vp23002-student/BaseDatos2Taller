@@ -13,7 +13,7 @@ const URL = OBJETIVO === 'rust' ? 'http://backend:3000/api/ordenes' : 'http://mo
 const VUS = Number(__ENV.VUS || 50);
 const ETIQUETA = `${OBJETIVO}_vus${VUS}_rep${__ENV.REPETICION || 1}`;
 
-const semilla = JSON.parse(open('/datos-semilla/semilla.json'));
+const semilla = JSON.parse(open(`/datos-semilla/${__ENV.ARCHIVO_SEMILLA || 'semilla_demo.json'}`));
 const VEHICULOS = semilla.vehiculos.map((v) => v._id);
 const REPUESTOS = semilla.repuestos;
 const SERVICIOS = ['filtro_aire', 'pastillas_freno', 'rotacion_llantas', 'revision_general', 'bujias', 'refrigerante'];

@@ -45,7 +45,7 @@ const ESCENARIOS: Record<string, Escenario> = {
 const elegidos = (env.ESCENARIOS ?? Object.keys(ESCENARIOS).join(',')).split(',').map((s) => s.trim());
 const arquitecturas = (env.ARQUITECTURAS ?? 'propuesta,monolito').split(',').map((s) => s.trim());
 
-const semilla = JSON.parse(fs.readFileSync('/datos-semilla/semilla.json', 'utf8'));
+const semilla = JSON.parse(fs.readFileSync(`/datos-semilla/${env.ARCHIVO_SEMILLA ?? 'semilla_demo.json'}`, 'utf8'));
 const VEHICULOS: string[] = semilla.vehiculos.map((v: any) => v._id);
 const auth = 'Basic ' + Buffer.from(`${USUARIO}:${CLAVE}`).toString('base64');
 

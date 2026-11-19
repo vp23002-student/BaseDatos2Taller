@@ -41,7 +41,7 @@ impl Config {
             couch_admin_pass: var("COUCHDB_PASSWORD", "admin"),
             usuarios_iniciales: usuarios,
             sembrar_demo: var("SEMBRAR_DEMO", "true") == "true",
-            ruta_semilla: var("RUTA_SEMILLA", "/datos-semilla/semilla.json"),
+            ruta_semilla: var("RUTA_SEMILLA", "/datos-semilla/semilla_demo.json"),
             prefijo_whatsapp: var("PREFIJO_WHATSAPP", "503"),
         }
     }

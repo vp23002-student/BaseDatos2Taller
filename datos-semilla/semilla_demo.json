@@ -1,0 +1,525 @@
+{
+ "descripcion": "Datos de DEMOSTRACIÓN (pequeños, sintéticos y anonimizados).",
+ "generado_para": "2026-11-19",
+ "clientes": [
+  {
+   "_id": "cliente:0001",
+   "tipo": "cliente",
+   "nombre": "Ana Prueba",
+   "telefono": "+503 7012-3401",
+   "consentimiento_datos": true,
+   "fecha_registro": "2026-04-26"
+  },
+  {
+   "_id": "cliente:0002",
+   "tipo": "cliente",
+   "nombre": "Luis Demo",
+   "telefono": "+503 7012-3402",
+   "consentimiento_datos": true,
+   "fecha_registro": "2026-04-19"
+  },
+  {
+   "_id": "cliente:0003",
+   "tipo": "cliente",
+   "nombre": "Carla Ejemplo",
+   "telefono": "+503 7012-3403",
+   "consentimiento_datos": true,
+   "fecha_registro": "2026-04-12"
+  },
+  {
+   "_id": "cliente:0004",
+   "tipo": "cliente",
+   "nombre": "José Ficticio",
+   "telefono": "+503 7012-3404",
+   "consentimiento_datos": true,
+   "fecha_registro": "2026-04-05"
+  },
+  {
+   "_id": "cliente:0005",
+   "tipo": "cliente",
+   "nombre": "María Muestra",
+   "telefono": "+503 7012-3405",
+   "consentimiento_datos": true,
+   "fecha_registro": "2026-03-29"
+  },
+  {
+   "_id": "cliente:0006",
+   "tipo": "cliente",
+   "nombre": "Pedro Sintético",
+   "telefono": "+503 7012-3406",
+   "consentimiento_datos": true,
+   "fecha_registro": "2026-03-22"
+  },
+  {
+   "_id": "cliente:0007",
+   "tipo": "cliente",
+   "nombre": "Sofía Anónimo",
+   "telefono": "+503 7012-3407",
+   "consentimiento_datos": true,
+   "fecha_registro": "2026-03-15"
+  },
+  {
+   "_id": "cliente:0008",
+   "tipo": "cliente",
+   "nombre": "Carlos Ensayo",
+   "telefono": "+503 7012-3408",
+   "consentimiento_datos": true,
+   "fecha_registro": "2026-03-08"
+  }
+ ],
+ "vehiculos": [
+  {
+   "_id": "vehiculo:P900037",
+   "tipo": "vehiculo",
+   "cliente_id": "cliente:0001",
+   "placa": "P900037",
+   "marca": "Toyota",
+   "modelo": "Corolla",
+   "anio": 2015,
+   "kilometraje_actual": 98500,
+   "km_diario_estimado": 62.5
+  },
+  {
+   "_id": "vehiculo:P900074",
+   "tipo": "vehiculo",
+   "cliente_id": "cliente:0002",
+   "placa": "P900074",
+   "marca": "Nissan",
+   "modelo": "Frontier",
+   "anio": 2018,
+   "kilometraje_actual": 142300,
+   "km_diario_estimado": 62.5
+  },
+  {
+   "_id": "vehiculo:P900111",
+   "tipo": "vehiculo",
+   "cliente_id": "cliente:0003",
+   "placa": "P900111",
+   "marca": "Mazda",
+   "modelo": "3",
+   "anio": 2016,
+   "kilometraje_actual": 87900,
+   "km_diario_estimado": 62.5
+  },
+  {
+   "_id": "vehiculo:P900148",
+   "tipo": "vehiculo",
+   "cliente_id": "cliente:0004",
+   "placa": "P900148",
+   "marca": "Hyundai",
+   "modelo": "Tucson",
+   "anio": 2019,
+   "kilometraje_actual": 65200,
+   "km_diario_estimado": 62.5
+  },
+  {
+   "_id": "vehiculo:P900185",
+   "tipo": "vehiculo",
+   "cliente_id": "cliente:0005",
+   "placa": "P900185",
+   "marca": "Kia",
+   "modelo": "Rio",
+   "anio": 2020,
+   "kilometraje_actual": 41800,
+   "km_diario_estimado": 62.5
+  },
+  {
+   "_id": "vehiculo:P900222",
+   "tipo": "vehiculo",
+   "cliente_id": "cliente:0006",
+   "placa": "P900222",
+   "marca": "Honda",
+   "modelo": "Civic",
+   "anio": 2014,
+   "kilometraje_actual": 156000,
+   "km_diario_estimado": 62.5
+  },
+  {
+   "_id": "vehiculo:P900259",
+   "tipo": "vehiculo",
+   "cliente_id": "cliente:0007",
+   "placa": "P900259",
+   "marca": "Toyota",
+   "modelo": "Hilux",
+   "anio": 2021,
+   "kilometraje_actual": 73400,
+   "km_diario_estimado": 62.5
+  },
+  {
+   "_id": "vehiculo:P900296",
+   "tipo": "vehiculo",
+   "cliente_id": "cliente:0008",
+   "placa": "P900296",
+   "marca": "Isuzu",
+   "modelo": "D-Max",
+   "anio": 2019,
+   "kilometraje_actual": 98100,
+   "km_diario_estimado": 62.5
+  },
+  {
+   "_id": "vehiculo:P900333",
+   "tipo": "vehiculo",
+   "cliente_id": "cliente:0002",
+   "placa": "P900333",
+   "marca": "Toyota",
+   "modelo": "Yaris",
+   "anio": 2017,
+   "kilometraje_actual": 77000,
+   "km_diario_estimado": 62.5
+  }
+ ],
+ "repuestos": [
+  {
+   "_id": "repuesto:7501000000011",
+   "tipo": "repuesto",
+   "codigo_barras": "7501000000011",
+   "descripcion": "Aceite motor 10W-30 (galón)",
+   "existencia": 46,
+   "minimo_reorden": 10,
+   "proveedor": "Lubricantes del Occidente",
+   "precio": 22.5
+  },
+  {
+   "_id": "repuesto:7501000000035",
+   "tipo": "repuesto",
+   "codigo_barras": "7501000000035",
+   "descripcion": "Filtro de aceite",
+   "existencia": 33,
+   "minimo_reorden": 8,
+   "proveedor": "Repuestos Santa Ana",
+   "precio": 6.75
+  },
+  {
+   "_id": "repuesto:7501000000059",
+   "tipo": "repuesto",
+   "codigo_barras": "7501000000059",
+   "descripcion": "Filtro de aire",
+   "existencia": 12,
+   "minimo_reorden": 4,
+   "proveedor": "Repuestos Santa Ana",
+   "precio": 11.0
+  },
+  {
+   "_id": "repuesto:7501000000073",
+   "tipo": "repuesto",
+   "codigo_barras": "7501000000073",
+   "descripcion": "Pastillas de freno delanteras",
+   "existencia": 10,
+   "minimo_reorden": 4,
+   "proveedor": "Frenos y Más",
+   "precio": 32.0
+  },
+  {
+   "_id": "repuesto:7501000000097",
+   "tipo": "repuesto",
+   "codigo_barras": "7501000000097",
+   "descripcion": "Batería 12V 45Ah",
+   "existencia": 5,
+   "minimo_reorden": 2,
+   "proveedor": "Baterías El Salvador",
+   "precio": 89.0
+  },
+  {
+   "_id": "repuesto:7501000000134",
+   "tipo": "repuesto",
+   "codigo_barras": "7501000000134",
+   "descripcion": "Juego de bujías (4)",
+   "existencia": 8,
+   "minimo_reorden": 3,
+   "proveedor": "Distribuidora Automotriz",
+   "precio": 24.0
+  },
+  {
+   "_id": "repuesto:7501000000158",
+   "tipo": "repuesto",
+   "codigo_barras": "7501000000158",
+   "descripcion": "Plumillas limpiaparabrisas (par)",
+   "existencia": 2,
+   "minimo_reorden": 4,
+   "proveedor": "Repuestos Santa Ana",
+   "precio": 12.0
+  }
+ ],
+ "ordenes_historicas": [
+  {
+   "_id": "orden:semilla:00001",
+   "tipo": "orden_servicio",
+   "vehiculo_id": "vehiculo:P900037",
+   "cliente_id": "cliente:0001",
+   "fecha": "2026-08-31",
+   "kilometraje": 93500,
+   "servicios": [
+    {
+     "tipo": "cambio_aceite",
+     "descripcion": "",
+     "costo": 15
+    }
+   ],
+   "repuestos_usados": [
+    {
+     "repuesto_id": "repuesto:7501000000011",
+     "codigo_barras": "7501000000011",
+     "descripcion": "Aceite motor 10W-30 (galón)",
+     "cantidad": 2,
+     "precio_unitario": 22.5
+    },
+    {
+     "repuesto_id": "repuesto:7501000000035",
+     "codigo_barras": "7501000000035",
+     "descripcion": "Filtro de aceite",
+     "cantidad": 1,
+     "precio_unitario": 6.75
+    }
+   ],
+   "mecanico": "mecanico1",
+   "costo_total": 66.75,
+   "estado": "completada",
+   "dispositivo": "semilla"
+  },
+  {
+   "_id": "orden:semilla:00002",
+   "tipo": "orden_servicio",
+   "vehiculo_id": "vehiculo:P900074",
+   "cliente_id": "cliente:0002",
+   "fecha": "2026-08-31",
+   "kilometraje": 137300,
+   "servicios": [
+    {
+     "tipo": "cambio_aceite",
+     "descripcion": "",
+     "costo": 15
+    }
+   ],
+   "repuestos_usados": [
+    {
+     "repuesto_id": "repuesto:7501000000011",
+     "codigo_barras": "7501000000011",
+     "descripcion": "Aceite motor 10W-30 (galón)",
+     "cantidad": 2,
+     "precio_unitario": 22.5
+    },
+    {
+     "repuesto_id": "repuesto:7501000000035",
+     "codigo_barras": "7501000000035",
+     "descripcion": "Filtro de aceite",
+     "cantidad": 1,
+     "precio_unitario": 6.75
+    }
+   ],
+   "mecanico": "mecanico1",
+   "costo_total": 66.75,
+   "estado": "completada",
+   "dispositivo": "semilla"
+  },
+  {
+   "_id": "orden:semilla:00003",
+   "tipo": "orden_servicio",
+   "vehiculo_id": "vehiculo:P900111",
+   "cliente_id": "cliente:0003",
+   "fecha": "2026-09-01",
+   "kilometraje": 82962,
+   "servicios": [
+    {
+     "tipo": "cambio_aceite",
+     "descripcion": "",
+     "costo": 15
+    }
+   ],
+   "repuestos_usados": [
+    {
+     "repuesto_id": "repuesto:7501000000011",
+     "codigo_barras": "7501000000011",
+     "descripcion": "Aceite motor 10W-30 (galón)",
+     "cantidad": 2,
+     "precio_unitario": 22.5
+    },
+    {
+     "repuesto_id": "repuesto:7501000000035",
+     "codigo_barras": "7501000000035",
+     "descripcion": "Filtro de aceite",
+     "cantidad": 1,
+     "precio_unitario": 6.75
+    }
+   ],
+   "mecanico": "mecanico1",
+   "costo_total": 66.75,
+   "estado": "completada",
+   "dispositivo": "semilla"
+  },
+  {
+   "_id": "orden:semilla:00004",
+   "tipo": "orden_servicio",
+   "vehiculo_id": "vehiculo:P900148",
+   "cliente_id": "cliente:0004",
+   "fecha": "2026-09-01",
+   "kilometraje": 60262,
+   "servicios": [
+    {
+     "tipo": "cambio_aceite",
+     "descripcion": "",
+     "costo": 15
+    }
+   ],
+   "repuestos_usados": [
+    {
+     "repuesto_id": "repuesto:7501000000011",
+     "codigo_barras": "7501000000011",
+     "descripcion": "Aceite motor 10W-30 (galón)",
+     "cantidad": 2,
+     "precio_unitario": 22.5
+    },
+    {
+     "repuesto_id": "repuesto:7501000000035",
+     "codigo_barras": "7501000000035",
+     "descripcion": "Filtro de aceite",
+     "cantidad": 1,
+     "precio_unitario": 6.75
+    }
+   ],
+   "mecanico": "mecanico1",
+   "costo_total": 66.75,
+   "estado": "completada",
+   "dispositivo": "semilla"
+  },
+  {
+   "_id": "orden:semilla:00005",
+   "tipo": "orden_servicio",
+   "vehiculo_id": "vehiculo:P900185",
+   "cliente_id": "cliente:0005",
+   "fecha": "2026-09-02",
+   "kilometraje": 36925,
+   "servicios": [
+    {
+     "tipo": "cambio_aceite",
+     "descripcion": "",
+     "costo": 15
+    }
+   ],
+   "repuestos_usados": [
+    {
+     "repuesto_id": "repuesto:7501000000011",
+     "codigo_barras": "7501000000011",
+     "descripcion": "Aceite motor 10W-30 (galón)",
+     "cantidad": 2,
+     "precio_unitario": 22.5
+    },
+    {
+     "repuesto_id": "repuesto:7501000000035",
+     "codigo_barras": "7501000000035",
+     "descripcion": "Filtro de aceite",
+     "cantidad": 1,
+     "precio_unitario": 6.75
+    }
+   ],
+   "mecanico": "mecanico1",
+   "costo_total": 66.75,
+   "estado": "completada",
+   "dispositivo": "semilla"
+  },
+  {
+   "_id": "orden:semilla:00006",
+   "tipo": "orden_servicio",
+   "vehiculo_id": "vehiculo:P900222",
+   "cliente_id": "cliente:0006",
+   "fecha": "2026-09-02",
+   "kilometraje": 151125,
+   "servicios": [
+    {
+     "tipo": "cambio_aceite",
+     "descripcion": "",
+     "costo": 15
+    }
+   ],
+   "repuestos_usados": [
+    {
+     "repuesto_id": "repuesto:7501000000011",
+     "codigo_barras": "7501000000011",
+     "descripcion": "Aceite motor 10W-30 (galón)",
+     "cantidad": 2,
+     "precio_unitario": 22.5
+    },
+    {
+     "repuesto_id": "repuesto:7501000000035",
+     "codigo_barras": "7501000000035",
+     "descripcion": "Filtro de aceite",
+     "cantidad": 1,
+     "precio_unitario": 6.75
+    }
+   ],
+   "mecanico": "mecanico1",
+   "costo_total": 66.75,
+   "estado": "completada",
+   "dispositivo": "semilla"
+  },
+  {
+   "_id": "orden:semilla:00007",
+   "tipo": "orden_servicio",
+   "vehiculo_id": "vehiculo:P900259",
+   "cliente_id": "cliente:0007",
+   "fecha": "2026-08-26",
+   "kilometraje": 68087,
+   "servicios": [
+    {
+     "tipo": "cambio_aceite",
+     "descripcion": "",
+     "costo": 15
+    }
+   ],
+   "repuestos_usados": [
+    {
+     "repuesto_id": "repuesto:7501000000011",
+     "codigo_barras": "7501000000011",
+     "descripcion": "Aceite motor 10W-30 (galón)",
+     "cantidad": 2,
+     "precio_unitario": 22.5
+    },
+    {
+     "repuesto_id": "repuesto:7501000000035",
+     "codigo_barras": "7501000000035",
+     "descripcion": "Filtro de aceite",
+     "cantidad": 1,
+     "precio_unitario": 6.75
+    }
+   ],
+   "mecanico": "mecanico1",
+   "costo_total": 66.75,
+   "estado": "completada",
+   "dispositivo": "semilla"
+  },
+  {
+   "_id": "orden:semilla:00008",
+   "tipo": "orden_servicio",
+   "vehiculo_id": "vehiculo:P900296",
+   "cliente_id": "cliente:0008",
+   "fecha": "2026-10-30",
+   "kilometraje": 96850,
+   "servicios": [
+    {
+     "tipo": "cambio_aceite",
+     "descripcion": "",
+     "costo": 15
+    }
+   ],
+   "repuestos_usados": [
+    {
+     "repuesto_id": "repuesto:7501000000011",
+     "codigo_barras": "7501000000011",
+     "descripcion": "Aceite motor 10W-30 (galón)",
+     "cantidad": 2,
+     "precio_unitario": 22.5
+    },
+    {
+     "repuesto_id": "repuesto:7501000000035",
+     "codigo_barras": "7501000000035",
+     "descripcion": "Filtro de aceite",
+     "cantidad": 1,
+     "precio_unitario": 6.75
+    }
+   ],
+   "mecanico": "mecanico1",
+   "costo_total": 66.75,
+   "estado": "completada",
+   "dispositivo": "semilla"
+  }
+ ]
+}

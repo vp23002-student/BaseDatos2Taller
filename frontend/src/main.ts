@@ -24,12 +24,12 @@ const MENU = [
   ['vehiculos', '🚗', 'Vehículos'],
   ['orden', '🔧', 'Nueva orden'],
   ['inventario', '📦', 'Inventario'],
-  ['sync', '🔄', 'Sincronización'],
   ['reportes', '📊', 'Reportes'],
 ];
 
 const app = document.getElementById('app')!;
 let reactiva = false;
+let rutaPrevia = '';
 
 function pantallaLogin(error = '') {
   const previa = sesionGuardada();
@@ -38,7 +38,7 @@ function pantallaLogin(error = '') {
       <form id="flogin" class="tarjeta">
         <img src="/icono.svg" width="64" alt="" />
         <h1>TallerSync</h1>
-        <p class="ayuda">Mantenimiento preventivo y repuestos · funciona sin internet</p>
+        <p class="ayuda">Historial y avisos de mantenimiento para su taller</p>
         ${error ? `<p class="error">${h(error)}</p>` : ''}
         <label>Usuario<input id="usuario" value="${h(previa?.usuario ?? 'mecanico1')}" autocomplete="username" /></label>
         <label>Contraseña<input id="clave" type="password" autocomplete="current-password" /></label>
@@ -49,7 +49,7 @@ function pantallaLogin(error = '') {
     e.preventDefault();
     const btn = $('#flogin button') as HTMLButtonElement;
     btn.disabled = true;
-    btn.textContent = 'Abriendo réplica local…';
+    btn.textContent = 'Entrando…';
     try {
       await iniciarSesion(($('#usuario') as HTMLInputElement).value.trim(), ($('#clave') as HTMLInputElement).value);
       montar();
@@ -81,7 +81,8 @@ function montar() {
     $('#estado-sync').innerHTML = barraEstado();
     // no repintar mientras el usuario escribe en un formulario
     const activo = document.activeElement;
-    const escribiendo = activo && $('#vista').contains(activo) && /INPUT|TEXTAREA|SELECT/.test(activo.tagName);
+    const escribiendo = !!activo && $('#vista').contains(activo) && /INPUT|TEXTAREA|SELECT/.test(activo.tagName)
+      && !['checkbox', 'radio', 'button', 'submit'].includes((activo as HTMLInputElement).type);
     if (reactiva && !escribiendo) enrutar();
   });
   $('#estado-sync').innerHTML = barraEstado();
@@ -100,7 +101,9 @@ function enrutar() {
   } catch (e: any) {
     cont.innerHTML = `<p class="error">${h(e.message)}</p>`;
   }
-  if (reactiva) window.scrollTo(0, scroll);
+  // repintado por sincronización: conservar posición; pantalla nueva: arriba
+  window.scrollTo(0, location.hash === rutaPrevia ? scroll : 0);
+  rutaPrevia = location.hash;
 }
 
 if (import.meta.env.PROD && 'serviceWorker' in navigator) {

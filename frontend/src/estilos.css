@@ -89,9 +89,8 @@ th { font-size: .85rem; color: var(--suave); text-transform: uppercase; }
 .ficha { display: flex; flex-direction: column; gap: .2rem; padding: .9rem; border: 2px solid var(--borde); border-radius: 12px; text-decoration: none; color: inherit; background: #fff; }
 .ficha:hover { border-color: var(--azul2); }
 .placa { font-family: 'DejaVu Sans Mono', monospace; letter-spacing: .08em; background: var(--amarillo); color: #000; padding: .1rem .5rem; border-radius: 6px; align-self: flex-start; }
-.placa.grande { font-size: 2rem; }
+.placa.grande { font-size: 2rem; display: inline-block; }
 .cabecera-vehiculo { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-.qr { text-align: center; } .qr small { display: block; }
 .orden { border: 1px solid var(--borde); border-radius: 10px; padding: .7rem; margin-bottom: .6rem; }
 .orden header { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; margin-bottom: .3rem; }
 .der { margin-left: auto; display: flex; gap: .5rem; align-items: center; }
@@ -125,3 +124,14 @@ th { font-size: .85rem; color: var(--suave); text-transform: uppercase; }
   .usuario { display: none; }
   .linea { grid-template-columns: 1fr 64px 70px 48px; }
 }
+
+/* búsqueda rápida y listas cortas */
+.resultado { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; padding: .6rem 0; border-bottom: 1px solid var(--borde); }
+.resultado > span { flex: 1; min-width: 220px; }
+.pie-lista { display: flex; gap: .8rem; align-items: center; justify-content: space-between; margin-top: .6rem; }
+.dos-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); column-gap: .8rem; }
+.btn-link.oscuro { color: var(--azul2); padding: .4rem 0; }
+details { margin-top: .6rem; }
+summary { cursor: pointer; font-weight: 600; color: var(--azul2); padding: .4rem 0; }
+#placa-rapida { font-size: 1.3rem; text-transform: uppercase; }
+#placa-rapida::placeholder { text-transform: none; }

@@ -5,7 +5,7 @@ export function vistaSync(c: HTMLElement) {
   const conflictos = [...cache.values()].filter((d) => d._conflicts?.length);
   c.innerHTML = `
     <section class="tarjeta">
-      <h2>Sincronización offline-first</h2>
+      <h2>Sincronización</h2>
       <div class="kpis">
         <div class="kpi ${estado.enLinea ? 'kpi-verde' : 'kpi-rojo'}"><b>${estado.enLinea ? 'En línea' : 'Sin conexión'}</b><span>${estado.sincronizando ? 'replicando…' : `última sync ${h(estado.ultimaSync || '—')}`}</span></div>
         <div class="kpi"><b>${estado.pendientes.size}</b><span>Cambios locales por subir</span></div>
@@ -14,18 +14,16 @@ export function vistaSync(c: HTMLElement) {
       </div>
       <label class="interruptor"><input type="checkbox" id="offline" ${estado.modoSinConexion ? 'checked' : ''} />
         <span>Simular corte de internet (para la demostración)</span></label>
-      <p class="ayuda">Con el corte activado puede seguir registrando órdenes: se guardan en PouchDB (IndexedDB).
-      Al desactivarlo, el protocolo de replicación de CouchDB envía solo los cambios pendientes.</p>
+      <p class="ayuda">Con el corte activado se puede seguir trabajando: todo se guarda en la tableta y se sube al quitarlo.</p>
     </section>
     <section class="tarjeta">
       <h2>Conflictos de edición</h2>
-      <p class="ayuda">Ocurren cuando dos tabletas editan el mismo documento sin conexión. CouchDB conserva ambas
-      versiones (MVCC) y elige una ganadora determinista; aquí el usuario decide cuál queda.</p>
+      <p class="ayuda">Aparecen si dos tabletas editan lo mismo sin internet. Elija qué versión se queda.</p>
       <div id="conf">${conflictos.length ? '' : '<p class="vacio">Sin conflictos.</p>'}</div>
     </section>
     <section class="tarjeta">
-      <h2>Bitácora</h2>
-      <ul class="bitacora">${estado.log.map((l) => `<li class="log-${l.tipo}"><small>${h(l.hora)}</small> ${h(l.texto)}</li>`).join('') || '<li>Sin eventos</li>'}</ul>
+      <h2>Últimos eventos</h2>
+      <ul class="bitacora">${estado.log.slice(0, 15).map((l) => `<li class="log-${l.tipo}"><small>${h(l.hora)}</small> ${h(l.texto)}</li>`).join('') || '<li>Sin eventos</li>'}</ul>
     </section>`;
 
   infoLocal().then((i) => { const el = c.querySelector('#ndocs'); if (el && i) el.textContent = String(i.doc_count); });

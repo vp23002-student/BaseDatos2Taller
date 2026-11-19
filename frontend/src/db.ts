@@ -146,12 +146,63 @@ export async function abrir() {
   iniciarSync();
 }
 
+// ---------- identidad del servidor ----------
+// El backend crea `config:instancia` con un id único cada vez que la base se crea desde cero.
+// Si cambia, el servidor fue reiniciado (p. ej. `detener.sh --borrar`): la réplica local es de
+// una base que ya no existe y NO debe subirse, o "reviviría" miles de documentos viejos.
+const CLAVE_INSTANCIA = 'tallersync.instancia';
+
+async function verificarInstancia(): Promise<boolean> {
+  let actual: string;
+  try {
+    actual = (await remotoCatalogo!.get('config:instancia')).valor;
+  } catch {
+    return false; // sin red, o el servidor aún se está creando: reintentar luego
+  }
+  const previa = localStorage.getItem(CLAVE_INSTANCIA);
+  const hayDatos = (await local!.info()).doc_count > 0;
+  if (previa !== actual && (previa || hayDatos)) {
+    registrar('El servidor fue reiniciado: se descarta la réplica local antigua', 'info');
+    sync?.cancel();
+    syncCatalogo?.cancel();
+    cambiosLocales?.cancel();
+    await local!.destroy();
+    localStorage.removeItem(CLAVE_PENDIENTES);
+    localStorage.setItem(CLAVE_INSTANCIA, actual);
+    location.reload();
+    return false;
+  }
+  localStorage.setItem(CLAVE_INSTANCIA, actual);
+  return true;
+}
+
 // ---------- replicación ----------
-export function iniciarSync() {
-  if (!local || !remoto || !remotoCatalogo || estado.modoSinConexion) return;
+// Sin `retry` de PouchDB: ante un error se detiene y la reconexión pasa siempre por
+// verificarInstancia(), así nunca se sube nada a una base distinta de la original.
+let temporizadorReintento: number | undefined;
+let espera = 1000;
+function reintentar() {
   sync?.cancel();
   syncCatalogo?.cancel();
-  const opciones = { live: true, retry: true, batch_size: 100, back_off_function: (d: number) => (d === 0 ? 1000 : Math.min(d * 2, 8000)) };
+  sync = null;
+  syncCatalogo = null;
+  estado.enLinea = false;
+  estado.sincronizando = false;
+  notificar();
+  clearTimeout(temporizadorReintento);
+  temporizadorReintento = window.setTimeout(iniciarSync, espera);
+  espera = Math.min(espera * 2, 8000);
+}
+
+export async function iniciarSync() {
+  if (!local || !remoto || !remotoCatalogo || estado.modoSinConexion) return;
+  clearTimeout(temporizadorReintento);
+  if (!(await verificarInstancia())) return reintentar();
+  if (estado.modoSinConexion) return;
+  espera = 1000;
+  sync?.cancel();
+  syncCatalogo?.cancel();
+  const opciones = { live: true, retry: false, batch_size: 100 };
 
   // Catálogo: el admin sincroniza en ambos sentidos; un mecánico solo lo descarga.
   const alCambiarCatalogo = (info: any) => {
@@ -163,13 +214,13 @@ export function iniciarSync() {
     if (docs.length) registrar(`Catálogo: ${docs.length} documento(s) ${info.direction === 'push' ? 'enviados' : 'recibidos'}`, 'ok');
   };
   const replCatalogo: any = esAdmin()
-    ? local.sync(remotoCatalogo, { ...opciones, push: { filter: esCatalogo } } as any)
+    ? local.sync(remotoCatalogo, { ...opciones, push: { filter: (d: any) => esCatalogo(d) && !String(d._id).startsWith('_design/') } } as any)
     : local.replicate.from(remotoCatalogo, opciones as any);
-  syncCatalogo = replCatalogo.on('change', alCambiarCatalogo);
+  syncCatalogo = replCatalogo.on('change', alCambiarCatalogo).on('error', reintentar);
 
   // Operación diaria (clientes, vehículos, órdenes, alertas): bidireccional.
   sync = local
-    .sync(remoto, { ...opciones, push: { filter: (d: any) => !esCatalogo(d) } } as any)
+    .sync(remoto, { ...opciones, push: { filter: (d: any) => !esCatalogo(d) && !String(d._id).startsWith('_design/') } } as any)
     .on('change', (info: any) => {
       const docs: Doc[] = info.change?.docs ?? [];
       if (info.direction === 'push') {
@@ -195,16 +246,17 @@ export function iniciarSync() {
       }
       notificar();
     })
-    .on('denied', (err: any) => registrar(`Servidor rechazó un documento: ${err?.message ?? err}`, 'error'))
+    .on('denied', (err: any) => registrar(`Servidor rechazó un documento: ${err?.reason ?? err?.message ?? JSON.stringify(err)}`, 'error'))
     .on('error', (err: any) => {
-      estado.enLinea = false;
-      registrar(`Error de replicación: ${err?.message ?? err}`, 'error');
+      registrar(`Sin conexión con el servidor (${err?.message ?? err}); reintentando…`, 'error');
+      reintentar();
     }) as any;
 }
 
 export function alternarSinConexion(activar: boolean) {
   estado.modoSinConexion = activar;
   if (activar) {
+    clearTimeout(temporizadorReintento);
     sync?.cancel();
     syncCatalogo?.cancel();
     sync = null;

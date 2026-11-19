@@ -1,7 +1,15 @@
 import { cache, estado, guardar } from '../db';
 import { escanear } from '../escaner';
-import { catalogo, dinero, hoyISO, km, kmActual, normalizarPlaca, nuevoId, porTipo, stockActual } from '../logica';
+import { type Regla, catalogo, dinero, hoyISO, km, kmActual, normalizarPlaca, nuevoId, porTipo, stockActual } from '../logica';
 import { $, aviso, h, valor } from '../ui';
+
+// Los servicios más frecuentes van a la vista; el resto queda en "Otros servicios".
+const COMUNES = ['cambio_aceite', 'filtro_aire', 'pastillas_freno', 'rotacion_llantas', 'revision_general'];
+const casilla = (r: Regla) => `
+  <label class="servicio"><input type="checkbox" value="${h(r.tipo)}" />
+    <span>${h(r.nombre)}<small>${r.intervalo_km ? `c/${km(r.intervalo_km)}` : ''}${r.intervalo_km && r.intervalo_meses ? ' o ' : ''}${r.intervalo_meses ? `${r.intervalo_meses} meses` : ''}</small></span>
+    <input type="number" class="costo" step="0.01" min="0" value="${r.precio_mano_obra}" title="Mano de obra ($)" />
+  </label>`;
 
 type Linea = { repuesto_id: string; codigo_barras: string; descripcion: string; cantidad: number; precio_unitario: number };
 
@@ -15,37 +23,31 @@ export function vistaOrden(c: HTMLElement, [vehiculoInicial]: string[]) {
     <section class="tarjeta">
       <h2>Nueva orden de servicio</h2>
       <form id="fo" class="formulario">
-        <fieldset><legend>Vehículo</legend>
-          <div class="fila">
-            <input id="placa" list="placas" placeholder="Placa" value="${h(vehiculo?.placa ?? '')}" autocomplete="off" />
-            <button type="button" class="btn btn-sec" id="esc-placa">📷 Escanear</button>
-          </div>
+        <fieldset><legend>1. Vehículo</legend>
+          <input id="placa" list="placas" placeholder="Placa" value="${h(vehiculo?.placa ?? '')}" autocomplete="off" />
           <datalist id="placas">${porTipo('vehiculo').map((v) => `<option value="${h(v.placa)}">`).join('')}</datalist>
           <p id="info-veh" class="ayuda"></p>
-          <label>Kilometraje actual (odómetro)<input id="km" type="number" min="1" required /></label>
-          <label>Fecha<input id="fecha" type="date" value="${hoyISO()}" required /></label>
+          <label>Kilometraje que marca hoy el odómetro<input id="km" type="number" min="1" required /></label>
         </fieldset>
-        <fieldset><legend>Servicios realizados</legend>
-          <div class="servicios">${reglas.map((r) => `
-            <label class="servicio"><input type="checkbox" value="${h(r.tipo)}" />
-              <span>${h(r.nombre)}<small>${r.intervalo_km ? `c/${km(r.intervalo_km)}` : ''}${r.intervalo_km && r.intervalo_meses ? ' o ' : ''}${r.intervalo_meses ? `${r.intervalo_meses} meses` : ''}</small></span>
-              <input type="number" class="costo" step="0.01" min="0" value="${r.precio_mano_obra}" title="Mano de obra" />
-            </label>`).join('')}
-          </div>
+        <fieldset><legend>2. Servicios realizados</legend>
+          <div class="servicios">${reglas.filter((r) => COMUNES.includes(r.tipo)).map(casilla).join('')}</div>
+          <details><summary>Otros servicios</summary>
+            <div class="servicios">${reglas.filter((r) => !COMUNES.includes(r.tipo)).map(casilla).join('')}</div>
+          </details>
         </fieldset>
-        <fieldset><legend>Repuestos utilizados</legend>
+        <fieldset><legend>3. Repuestos usados</legend>
           <div class="fila">
             <select id="sel-rep"><option value="">— Elegir repuesto —</option>
               ${repuestos.map((r) => `<option value="${h(r._id)}">${h(r.descripcion)} (${stockActual(r)} disp.)</option>`).join('')}
             </select>
             <button type="button" class="btn btn-sec" id="add-rep">Agregar</button>
-            <button type="button" class="btn btn-sec" id="esc-rep">📷 Escanear código</button>
+            <button type="button" class="btn btn-sec" id="esc-rep">📷 Código de barras</button>
           </div>
           <div id="lineas"></div>
         </fieldset>
-        <label>Observaciones del mecánico<textarea id="obs" rows="2"></textarea></label>
+        <label>Observaciones (opcional)<input id="obs" /></label>
         <div class="total">Total: <b id="total">$0.00</b></div>
-        <button class="btn btn-grande">💾 Guardar orden (funciona sin conexión)</button>
+        <button class="btn btn-grande">💾 Guardar orden</button>
       </form>
     </section>`;
 
@@ -56,8 +58,10 @@ export function vistaOrden(c: HTMLElement, [vehiculoInicial]: string[]) {
     if (vehiculo) {
       const cli = cache.get(vehiculo.cliente_id);
       info.innerHTML = `✔ ${h(vehiculo.marca)} ${h(vehiculo.modelo)} · ${h(cli?.nombre ?? '')} · último registro ${km(kmActual(vehiculo))}`;
-      ($('#km', c) as HTMLInputElement).min = String(kmActual(vehiculo));
-    } else info.textContent = p ? 'Placa no registrada (regístrela en Vehículos)' : '';
+      const kmInp = $('#km', c) as HTMLInputElement;
+      kmInp.placeholder = `Último registro: ${kmActual(vehiculo)}`;
+      kmInp.min = String(kmActual(vehiculo));
+    } else info.innerHTML = p ? `Placa no registrada. <a href="#/vehiculos/nuevo/${encodeURIComponent(p)}">Registrarla</a>` : '';
   };
   const total = () => {
     let t = 0;
@@ -91,11 +95,8 @@ export function vistaOrden(c: HTMLElement, [vehiculoInicial]: string[]) {
   };
 
   pintarVehiculo();
+  ($(vehiculo ? '#km' : '#placa', c) as HTMLInputElement).focus();
   $('#placa', c).addEventListener('input', pintarVehiculo);
-  $('#esc-placa', c).addEventListener('click', async () => {
-    const v = await escanear('Escanear placa o QR del vehículo');
-    if (v) { ($('#placa', c) as HTMLInputElement).value = normalizarPlaca(v); pintarVehiculo(); }
-  });
   c.querySelectorAll('.servicio input').forEach((i) => i.addEventListener('input', total));
   $('#add-rep', c).addEventListener('click', () => { const v = valor('#sel-rep', c); if (v) agregar(v); });
   $('#esc-rep', c).addEventListener('click', async () => {
@@ -119,7 +120,7 @@ export function vistaOrden(c: HTMLElement, [vehiculoInicial]: string[]) {
       const id = nuevoId('orden');
       await guardar({
         _id: id, tipo: 'orden_servicio', vehiculo_id: vehiculo._id, cliente_id: vehiculo.cliente_id,
-        fecha: valor('#fecha', c), kilometraje, servicios, repuestos_usados: lineas,
+        fecha: hoyISO(), kilometraje, servicios, repuestos_usados: lineas,
         mecanico: estado.sesion?.usuario ?? '', observaciones: valor('#obs', c),
         costo_total: total(), estado: 'completada',
         creada_sin_conexion: !estado.enLinea, creada_en: new Date().toISOString(),

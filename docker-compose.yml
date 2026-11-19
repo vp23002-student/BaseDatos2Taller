@@ -29,7 +29,7 @@ services:
     env_file: .env
     environment:
       COUCHDB_URL: http://couchdb:5984
-      RUTA_SEMILLA: /datos-semilla/semilla.json
+      RUTA_SEMILLA: /datos-semilla/${ARCHIVO_SEMILLA:-semilla_demo.json}
       RUST_LOG: taller_backend=info
     volumes:
       - ./datos-semilla:/datos-semilla:ro
@@ -75,7 +75,7 @@ services:
     profiles: ["experimento"]
     environment:
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
-      RUTA_SEMILLA: /datos-semilla/semilla.json
+      RUTA_SEMILLA: /datos-semilla/${ARCHIVO_SEMILLA:-semilla_demo.json}
     volumes:
       - ./datos-semilla:/datos-semilla:ro
     depends_on:
@@ -98,6 +98,8 @@ services:
       - ./datos-semilla:/datos-semilla:ro
       - ./experimentos/resultados:/resultados
     env_file: .env
+    environment:
+      ARCHIVO_SEMILLA: ${ARCHIVO_SEMILLA:-semilla_demo.json}
 
   sync-sim:
     build: ./experimentos/sync-sim
@@ -109,6 +111,7 @@ services:
       MONOLITO_URL: http://monolito:4000
       HOST_UID: ${HOST_UID:-1000}
       HOST_GID: ${HOST_GID:-1000}
+      ARCHIVO_SEMILLA: ${ARCHIVO_SEMILLA:-semilla_demo.json}
     volumes:
       - ./datos-semilla:/datos-semilla:ro
       - ./experimentos/resultados:/resultados

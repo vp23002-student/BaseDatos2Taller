@@ -25,6 +25,13 @@ export function badge(estado: string): string {
   return `<span class="badge badge-${h(estado)}">${h(textos[estado] ?? estado)}</span>`;
 }
 
+/** Pie de lista: "Mostrando 10 de 42" + botón para ver más. */
+export function pieLista(mostrados: number, total: number): string {
+  if (total <= mostrados) return '';
+  return `<div class="pie-lista"><small>Mostrando ${mostrados} de ${total}. Escriba para filtrar.</small>
+    <button type="button" class="btn btn-sec" data-mas>Ver más</button></div>`;
+}
+
 export function $(sel: string, raiz: ParentNode = document): HTMLElement {
   const el = raiz.querySelector(sel);
   if (!el) throw new Error(`No existe ${sel}`);

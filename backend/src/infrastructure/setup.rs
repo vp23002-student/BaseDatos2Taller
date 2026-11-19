@@ -131,6 +131,17 @@ pub async fn inicializar(c: &CouchClient, cat: &CouchClient, cfg: &Config) -> Re
     });
     cat.upsert("config:catalogo_servicios", catalogo).await?;
 
+    // Identidad de esta base: cambia solo si se crea desde cero. Las tabletas la comparan
+    // para descartar réplicas locales de una base anterior en vez de volver a subirlas.
+    if cat.obtener_opcional("config:instancia").await?.is_none() {
+        let id = uuid::Uuid::new_v4().simple().to_string();
+        cat.guardar("config:instancia", &json!({
+            "_id": "config:instancia", "tipo": "config", "valor": id,
+            "creada": chrono::Utc::now().to_rfc3339()
+        })).await?;
+        info!("Nueva instancia de base de datos: {id}");
+    }
+
     if cfg.sembrar_demo {
         sembrar(c, cat, &cfg.ruta_semilla).await?;
     }

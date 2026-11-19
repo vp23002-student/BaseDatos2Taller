@@ -31,8 +31,23 @@ function sumarDias(iso: string, dias: number): string {
 export function estadoAlerta(fecha: string): 'vencida' | 'proxima' | 'programada' {
   const hoy = hoyISO();
   if (fecha < hoy) return 'vencida';
-  if (fecha <= sumarDias(hoy, 15)) return 'proxima';
+  if (fecha <= sumarDias(hoy, 2)) return 'proxima';
   return 'programada';
+}
+
+/** Días desde hoy hasta la fecha (negativo = ya pasó). */
+export function diasHasta(fecha: string): number {
+  return Math.round((new Date(fecha + 'T00:00:00').getTime() - new Date(hoyISO() + 'T00:00:00').getTime()) / 86400000);
+}
+
+/** Texto corto: "Hoy", "Mañana", "Pasado mañana", "Vencido hace 3 días" o la fecha. */
+export function cuando(fechaISO: string): string {
+  const d = diasHasta(fechaISO);
+  if (d === 0) return 'Hoy';
+  if (d === 1) return 'Mañana';
+  if (d === 2) return 'Pasado mañana';
+  if (d < 0) return `Vencido hace ${-d} día${d === -1 ? '' : 's'}`;
+  return fecha(fechaISO);
 }
 
 /** Igual que en Rust: por (vehículo, servicio) cuenta la alerta de la orden más reciente. */

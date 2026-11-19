@@ -36,8 +36,10 @@ Abre **http://localhost:8080** (en una tableta de la misma red: `http://<IP-del-
 | `mecanico2` | `taller2026` | mecánico (para probar 2 tabletas) |
 | `jefe` | `jefe2026` | admin (además: entradas de inventario) |
 
-Se cargan datos **sintéticos y anonimizados** (120 clientes, 142 vehículos, 15 repuestos, ~190 órdenes
-históricas). Las credenciales están en `.env` (copiado de `.env.example`).
+Se cargan datos de demostración **pequeños y sintéticos** (8 clientes, 9 vehículos, 7 repuestos) con fechas
+relativas a hoy: siempre hay clientes a los que les toca hoy, mañana y pasado mañana. Antes de cada
+presentación ejecute `./scripts/reiniciar_demo.sh` para regenerarlos. Guía de uso: `Guia_TallerSync.pdf`.
+Las credenciales están en `.env` (copiado de `.env.example`).
 
 Otras direcciones útiles:
 
@@ -52,16 +54,16 @@ Detener: `./scripts/detener.sh` · Borrar también los datos: `./scripts/detener
 
 ## 3. Cómo se usa (recorrido)
 
-1. **Inicio:** clientes con mantenimiento vencido o próximo (alertas calculadas por Rust), botón
-   **WhatsApp** que abre el mensaje listo para enviar, y repuestos bajo mínimo.
-2. **Vehículos:** buscar por placa o **escanear** el QR de la placa; registrar cliente (con
-   consentimiento) y vehículo. La ficha muestra historial, próximos mantenimientos y el QR para el parabrisas.
-3. **Nueva orden:** placa → kilometraje → servicios (con mano de obra) → repuestos (lista o escaneo del
-   código de barras) → guardar. Se guarda **en la tableta** aunque no haya internet.
-4. **Inventario:** existencia calculada, mínimo de reorden; el `jefe` registra entradas.
-5. **Sincronización:** estado, cambios pendientes, bitácora, **interruptor "Simular corte de internet"**
-   y resolución de **conflictos** de edición.
-6. **Reportes:** tasa de retorno de clientes (instrumento de la hipótesis de negocio) y telemetría del backend Rust.
+1. **Inicio:** escribir la placa del carro que llegó (Enter abre la orden) y lista de clientes a avisar
+   (vencidos, hoy, mañana, pasado mañana) con botón **WhatsApp**.
+2. **Vehículos:** buscar por placa, marca o cliente; registrar un carro nuevo (al guardar abre su orden).
+3. **Nueva orden:** kilometraje → servicios → repuestos (lista o código de barras) → guardar. Funciona sin internet.
+   El backend Rust calcula la fecha del próximo mantenimiento.
+4. **Inventario:** existencias; lo que falta sale primero y en rojo. El `jefe` registra entradas.
+5. **Reportes:** tasa de retorno de clientes (instrumento de la hipótesis).
+6. El botón **En línea** abre la sincronización: simular corte de internet y resolver conflictos.
+
+Las listas muestran pocos resultados (8–15) con botón “Ver más”.
 
 ## 4. Ejecutar los experimentos (fases 3–5)
 

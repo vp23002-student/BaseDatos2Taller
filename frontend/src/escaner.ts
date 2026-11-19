@@ -12,9 +12,9 @@ export function escanear(titulo = 'Escanear código'): Promise<string | null> {
       <div class="modal-caja">
         <h2>${h(titulo)}</h2>
         <video playsinline muted></video>
-        <p class="ayuda" id="esc-estado">Apunte la cámara al código de barras o QR…</p>
+        <p class="ayuda" id="esc-estado">Apunte la cámara al código de barras…</p>
         <form id="esc-form" class="fila">
-          <input id="esc-manual" placeholder="…o escriba / use lector USB" autocomplete="off" />
+          <input id="esc-manual" placeholder="…o escriba el código" autocomplete="off" />
           <button class="btn">Usar</button>
         </form>
         <button class="btn btn-sec" id="esc-cerrar">Cancelar</button>

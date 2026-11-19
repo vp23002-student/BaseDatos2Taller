@@ -11,12 +11,10 @@
   "dependencies": {
     "@zxing/browser": "^0.1.5",
     "events": "^3.3.0",
-    "pouchdb-browser": "^9.0.0",
-    "qrcode": "^1.5.4"
+    "pouchdb-browser": "^9.0.0"
   },
   "devDependencies": {
     "@types/pouchdb-browser": "^6.1.5",
-    "@types/qrcode": "^1.5.6",
     "typescript": "^5.6.3",
     "vite": "^5.4.11"
   },
