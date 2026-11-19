@@ -1,0 +1,16 @@
+{
+  "name": "tallersync-sync-sim",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Cliente simulado (TypeScript/Node) que mide replicación offline-first vs. peticiones síncronas bajo red degradada (tc netem)",
+  "scripts": { "start": "tsx simulador.ts" },
+  "dependencies": {
+    "pouchdb-adapter-http": "9.0.0",
+    "pouchdb-adapter-memory": "9.0.0",
+    "pouchdb-core": "9.0.0",
+    "pouchdb-replication": "9.0.0",
+    "tsx": "4.19.2",
+    "typescript": "5.6.3"
+  }
+}

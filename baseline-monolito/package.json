@@ -1,0 +1,9 @@
+{
+  "name": "taller-monolito-referencia",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Arquitectura de REFERENCIA (grupo de control): backend monolítico Node.js + PostgreSQL con peticiones síncronas",
+  "scripts": { "start": "node server.js" },
+  "dependencies": { "express": "4.21.1", "pg": "8.13.1" }
+}

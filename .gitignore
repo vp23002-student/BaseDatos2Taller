@@ -25,11 +25,16 @@ __pycache__/
 .venv/
 venv/
 
-# --- Resultados crudos de experimentos (pesados y regenerables)
-# Se conservan: informe_resultados.md, resumen_resultados.xlsx,
-# graficos/, carga/, red/, metricas/ y metricas_codigo.json
-experimentos/resultados/crudos/
-experimentos/resultados/recursos/
+# --- Entregables académicos (no son código) ----------------
+presentacion/
+docs/
+EXPOSICION.md
+*.pptx
+*.pdf
+*.docx
+
+# --- Resultados de experimentos (se regeneran con ./scripts) -
+experimentos/resultados/
 
 # --- Logs y temporales -------------------------------------
 *.log

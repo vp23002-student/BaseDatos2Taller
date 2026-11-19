@@ -1,0 +1,126 @@
+# TallerSync — entorno controlado y replicable (Fase 3: sandbox con Docker Compose)
+#
+#   docker compose up -d --build                      -> aplicación (CouchDB + Rust + PWA)
+#   docker compose --profile experimento up -d        -> + monolito de referencia (Node + PostgreSQL)
+#   docker compose run --rm k6 ... / sync-sim / analisis  -> herramientas de medición
+
+name: tallersync
+
+services:
+  couchdb:
+    build: ./couchdb
+    container_name: taller-couchdb
+    environment:
+      COUCHDB_USER: ${COUCHDB_USER}
+      COUCHDB_PASSWORD: ${COUCHDB_PASSWORD}
+    volumes:
+      - couch-data:/opt/couchdb/data
+    ports:
+      - "5984:5984"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs http://localhost:5984/_up || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  backend:
+    build: ./backend
+    container_name: taller-backend
+    env_file: .env
+    environment:
+      COUCHDB_URL: http://couchdb:5984
+      RUTA_SEMILLA: /datos-semilla/semilla.json
+      RUST_LOG: taller_backend=info
+    volumes:
+      - ./datos-semilla:/datos-semilla:ro
+    depends_on:
+      couchdb:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs http://localhost:3000/api/salud || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  frontend:
+    build: ./frontend
+    container_name: taller-frontend
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+
+  # ---------- Arquitectura de referencia (monolito relacional) ----------
+  postgres:
+    image: postgres:16-alpine
+    container_name: taller-postgres
+    profiles: ["experimento"]
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 3s
+      retries: 30
+
+  monolito:
+    build: ./baseline-monolito
+    container_name: taller-monolito
+    profiles: ["experimento"]
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      RUTA_SEMILLA: /datos-semilla/semilla.json
+    volumes:
+      - ./datos-semilla:/datos-semilla:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "4000:4000"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:4000/api/salud || exit 1"]
+      interval: 3s
+      retries: 30
+
+  # ---------- Herramientas de medición ----------
+  k6:
+    image: grafana/k6:0.54.0
+    profiles: ["herramientas"]
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+    volumes:
+      - ./experimentos/k6:/scripts:ro
+      - ./datos-semilla:/datos-semilla:ro
+      - ./experimentos/resultados:/resultados
+    env_file: .env
+
+  sync-sim:
+    build: ./experimentos/sync-sim
+    profiles: ["herramientas"]
+    cap_add: ["NET_ADMIN"]   # necesario para simular la red con tc netem
+    env_file: .env
+    environment:
+      COUCH_URL: http://couchdb:5984
+      MONOLITO_URL: http://monolito:4000
+      HOST_UID: ${HOST_UID:-1000}
+      HOST_GID: ${HOST_GID:-1000}
+    volumes:
+      - ./datos-semilla:/datos-semilla:ro
+      - ./experimentos/resultados:/resultados
+
+  analisis:
+    build: ./experimentos/analisis
+    profiles: ["herramientas"]
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+    volumes:
+      - ./experimentos/resultados:/resultados
+      - ./docs:/docs
+
+volumes:
+  couch-data:
+  pg-data:

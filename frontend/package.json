@@ -1,0 +1,25 @@
+{
+  "name": "tallersync-frontend",
+  "version": "1.0.0",
+  "description": "PWA offline-first para tabletas de taller (TypeScript + PouchDB)",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "lint": "tsc --noEmit",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@zxing/browser": "^0.1.5",
+    "events": "^3.3.0",
+    "pouchdb-browser": "^9.0.0",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "@types/pouchdb-browser": "^6.1.5",
+    "@types/qrcode": "^1.5.6",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11"
+  },
+  "private": true,
+  "type": "module"
+}
