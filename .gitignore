@@ -1,0 +1,53 @@
+# ============================================================
+# TallerSync — archivos que NO se suben a GitHub
+# ============================================================
+
+# --- Secretos / credenciales -------------------------------
+# .env tiene las contraseñas reales; se versiona solo .env.example
+.env
+.env.*
+!.env.example
+
+# --- Dependencias (se reinstalan con npm / cargo) ----------
+node_modules/
+
+# --- Compilados y builds -----------------------------------
+# Rust
+target/
+**/*.rs.bk
+# Frontend (Vite)
+dist/
+*.tsbuildinfo
+.vite/
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# --- Resultados crudos de experimentos (pesados y regenerables)
+# Se conservan: informe_resultados.md, resumen_resultados.xlsx,
+# graficos/, carga/, red/, metricas/ y metricas_codigo.json
+experimentos/resultados/crudos/
+experimentos/resultados/recursos/
+
+# --- Logs y temporales -------------------------------------
+*.log
+npm-debug.log*
+*.tmp
+*.swp
+*~
+
+# --- Archivos de bloqueo de Office / LibreOffice -----------
+~$*
+.~lock.*#
+
+# --- Editores e IDE ----------------------------------------
+.vscode/
+.idea/
+*.code-workspace
+
+# --- Sistema operativo -------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
